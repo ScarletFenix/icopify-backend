@@ -14,18 +14,18 @@
     "@strapi/plugin-cloud": "5.10.2",
     "@strapi/plugin-users-permissions": "5.10.2",
     "@strapi/strapi": "5.10.2",
-    "better-sqlite3": "11.3.0",
-    "pg": "^8.13.3",
+    "pg": "8.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
     "styled-components": "^6.0.0"
   },
+  "devDependencies": {},
   "engines": {
     "node": ">=18.0.0 <=22.x.x",
     "npm": ">=6.0.0"
   },
   "strapi": {
-    "uuid": "0f40cf47-1070-4590-9d5e-d2a4f554dd71"
+    "uuid": "8dae241b-1b67-46dd-a47c-afb04d7e29ac"
   }
 }
