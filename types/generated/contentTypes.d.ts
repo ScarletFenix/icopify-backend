@@ -369,6 +369,52 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiSiteSite extends Struct.CollectionTypeSchema {
+  collectionName: 'sites';
+  info: {
+    description: '';
+    displayName: 'Site';
+    pluralName: 'sites';
+    singularName: 'site';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    contentCreationPlacementPrice: Schema.Attribute.Decimal;
+    contentPlacementPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    deliveryTime: Schema.Attribute.Integer & Schema.Attribute.Required;
+    domainAuthority: Schema.Attribute.Integer;
+    guestUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    linkType: Schema.Attribute.Enumeration<['DoFollow', 'NoFollow']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'DoFollow'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::site.site'> &
+      Schema.Attribute.Private;
+    maxLinksAllowed: Schema.Attribute.Integer & Schema.Attribute.Required;
+    owner: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    pricePerPost: Schema.Attribute.BigInteger;
+    publishedAt: Schema.Attribute.DateTime;
+    siteName: Schema.Attribute.String & Schema.Attribute.Required;
+    specialRequirements: Schema.Attribute.String & Schema.Attribute.Required;
+    traffic: Schema.Attribute.BigInteger;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    url: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    wordsLimitArticle: Schema.Attribute.BigInteger & Schema.Attribute.Required;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -824,7 +870,6 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -878,6 +923,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::site.site': ApiSiteSite;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

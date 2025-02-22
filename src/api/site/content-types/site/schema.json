@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sites",
+  "info": {
+    "singularName": "site",
+    "pluralName": "sites",
+    "displayName": "Site",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "domainAuthority": {
+      "type": "integer"
+    },
+    "traffic": {
+      "type": "biginteger"
+    },
+    "pricePerPost": {
+      "type": "biginteger"
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "linkType": {
+      "type": "enumeration",
+      "enum": [
+        "DoFollow",
+        "NoFollow"
+      ],
+      "default": "DoFollow",
+      "required": true
+    },
+    "maxLinksAllowed": {
+      "type": "integer",
+      "required": true
+    },
+    "wordsLimitArticle": {
+      "type": "biginteger",
+      "required": true
+    },
+    "contentPlacementPrice": {
+      "type": "decimal",
+      "required": true
+    },
+    "contentCreationPlacementPrice": {
+      "type": "decimal"
+    },
+    "deliveryTime": {
+      "type": "integer",
+      "required": true
+    },
+    "guestUrl": {
+      "type": "string",
+      "required": true
+    },
+    "specialRequirements": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
