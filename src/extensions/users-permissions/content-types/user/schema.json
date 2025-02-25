@@ -64,6 +64,27 @@
       "target": "plugin::users-permissions.role",
       "inversedBy": "users",
       "configurable": false
+    },
+    "facebook": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "linkedin": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "whatsapp": {
+      "type": "string"
+    },
+    "paypalEmail": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
     }
   }
 }
