@@ -85,6 +85,26 @@
     },
     "phoneNumber": {
       "type": "string"
+    },
+    "roleType": {
+      "type": "enumeration",
+      "enum": [
+        "buyer",
+        "publisher"
+      ],
+      "default": "publisher"
+    },
+    "status_sites": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::status-site.status-site",
+      "mappedBy": "updatedby"
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::site.site",
+      "mappedBy": "owner"
     }
   }
 }

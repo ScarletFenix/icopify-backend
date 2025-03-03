@@ -20,19 +20,9 @@
       "required": true,
       "unique": true
     },
-    "domainAuthority": {
-      "type": "integer"
-    },
-    "traffic": {
-      "type": "biginteger"
-    },
     "pricePerPost": {
-      "type": "biginteger"
-    },
-    "owner": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
+      "type": "biginteger",
+      "required": true
     },
     "linkType": {
       "type": "enumeration",
@@ -58,10 +48,6 @@
     "contentCreationPlacementPrice": {
       "type": "decimal"
     },
-    "deliveryTime": {
-      "type": "integer",
-      "required": true
-    },
     "guestUrl": {
       "type": "string",
       "required": true
@@ -69,6 +55,41 @@
     "specialRequirements": {
       "type": "string",
       "required": true
+    },
+    "deliveryTime": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "sites"
+    },
+    "mobileLanguage": {
+      "type": "enumeration",
+      "enum": [
+        "English",
+        "Spanish",
+        "French",
+        "German"
+      ],
+      "required": true,
+      "default": "English"
+    },
+    "sponsoredContent": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "categories": {
+      "type": "string",
+      "required": true
+    },
+    "status_site": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::status-site.status-site",
+      "mappedBy": "site"
     }
   }
 }

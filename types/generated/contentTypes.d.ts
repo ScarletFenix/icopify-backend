@@ -381,13 +381,13 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    categories: Schema.Attribute.String & Schema.Attribute.Required;
     contentCreationPlacementPrice: Schema.Attribute.Decimal;
     contentPlacementPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    deliveryTime: Schema.Attribute.Integer & Schema.Attribute.Required;
-    domainAuthority: Schema.Attribute.Integer;
+    deliveryTime: Schema.Attribute.String;
     guestUrl: Schema.Attribute.String & Schema.Attribute.Required;
     linkType: Schema.Attribute.Enumeration<['DoFollow', 'NoFollow']> &
       Schema.Attribute.Required &
@@ -396,15 +396,26 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::site.site'> &
       Schema.Attribute.Private;
     maxLinksAllowed: Schema.Attribute.Integer & Schema.Attribute.Required;
+    mobileLanguage: Schema.Attribute.Enumeration<
+      ['English', 'Spanish', 'French', 'German']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'English'>;
     owner: Schema.Attribute.Relation<
-      'oneToOne',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
-    pricePerPost: Schema.Attribute.BigInteger;
+    pricePerPost: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
     specialRequirements: Schema.Attribute.String & Schema.Attribute.Required;
-    traffic: Schema.Attribute.BigInteger;
+    sponsoredContent: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    status_site: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::status-site.status-site'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -412,6 +423,54 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     wordsLimitArticle: Schema.Attribute.BigInteger & Schema.Attribute.Required;
+  };
+}
+
+export interface ApiStatusSiteStatusSite extends Struct.CollectionTypeSchema {
+  collectionName: 'status_sites';
+  info: {
+    description: '';
+    displayName: 'StatusSite';
+    pluralName: 'status-sites';
+    singularName: 'status-site';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activity_status: Schema.Attribute.Enumeration<
+      ['Active', 'Inactive', 'Suspended']
+    > &
+      Schema.Attribute.DefaultTo<'Inactive'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::status-site.status-site'
+    > &
+      Schema.Attribute.Private;
+    performer_status: Schema.Attribute.Enumeration<
+      ['In Moderation', 'Approved', 'Rejected']
+    > &
+      Schema.Attribute.DefaultTo<'In Moderation'>;
+    publishedAt: Schema.Attribute.DateTime;
+    site: Schema.Attribute.Relation<'oneToOne', 'api::site.site'> &
+      Schema.Attribute.Unique;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedby: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    website_role: Schema.Attribute.Enumeration<['Admin', 'Contributor']> &
+      Schema.Attribute.DefaultTo<'Contributor'>;
+    website_status: Schema.Attribute.Enumeration<
+      ['Pending', 'Approved', 'Rejected', 'Suspended']
+    > &
+      Schema.Attribute.DefaultTo<'Pending'>;
   };
 }
 
@@ -906,6 +965,13 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    roleType: Schema.Attribute.Enumeration<['buyer', 'publisher']> &
+      Schema.Attribute.DefaultTo<'publisher'>;
+    sites: Schema.Attribute.Relation<'oneToMany', 'api::site.site'>;
+    status_sites: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::status-site.status-site'
+    >;
     twitter: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -931,6 +997,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::site.site': ApiSiteSite;
+      'api::status-site.status-site': ApiStatusSiteStatusSite;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

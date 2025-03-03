@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "status_sites",
+  "info": {
+    "singularName": "status-site",
+    "pluralName": "status-sites",
+    "displayName": "StatusSite",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "website_status": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected",
+        "Suspended"
+      ],
+      "default": "Pending"
+    },
+    "performer_status": {
+      "type": "enumeration",
+      "enum": [
+        "In Moderation",
+        "Approved",
+        "Rejected"
+      ],
+      "default": "In Moderation"
+    },
+    "activity_status": {
+      "type": "enumeration",
+      "enum": [
+        "Active",
+        "Inactive",
+        "Suspended"
+      ],
+      "default": "Inactive"
+    },
+    "site": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::site.site",
+      "inversedBy": "status_site",
+      "unique": true
+    },
+    "updatedby": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "status_sites"
+    },
+    "website_role": {
+      "type": "enumeration",
+      "enum": [
+        "Admin",
+        "Contributor"
+      ],
+      "default": "Contributor"
+    }
+  }
+}
