@@ -965,7 +965,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    roleType: Schema.Attribute.Enumeration<['buyer', 'publisher']> &
+    roleType: Schema.Attribute.Enumeration<['buyer', 'publisher', 'Admin']> &
       Schema.Attribute.DefaultTo<'publisher'>;
     sites: Schema.Attribute.Relation<'oneToMany', 'api::site.site'>;
     status_sites: Schema.Attribute.Relation<

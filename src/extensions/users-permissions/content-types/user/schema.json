@@ -90,7 +90,8 @@
       "type": "enumeration",
       "enum": [
         "buyer",
-        "publisher"
+        "publisher",
+        "Admin"
       ],
       "default": "publisher"
     },
