@@ -378,17 +378,18 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
     singularName: 'site';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     categories: Schema.Attribute.String & Schema.Attribute.Required;
-    contentCreationPlacementPrice: Schema.Attribute.Decimal;
+    contentCreationPlacementPrice: Schema.Attribute.Integer;
     contentPlacementPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     deliveryTime: Schema.Attribute.String;
     guestUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    isDeleted: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     linkType: Schema.Attribute.Enumeration<['DoFollow', 'NoFollow']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'DoFollow'>;
@@ -405,12 +406,10 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    pricePerPost: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
     specialRequirements: Schema.Attribute.String & Schema.Attribute.Required;
     sponsoredContent: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
     status_site: Schema.Attribute.Relation<
       'oneToOne',
@@ -419,9 +418,7 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    url: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
     wordsLimitArticle: Schema.Attribute.BigInteger & Schema.Attribute.Required;
   };
 }
@@ -435,7 +432,7 @@ export interface ApiStatusSiteStatusSite extends Struct.CollectionTypeSchema {
     singularName: 'status-site';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     activity_status: Schema.Attribute.Enumeration<
@@ -456,8 +453,7 @@ export interface ApiStatusSiteStatusSite extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.DefaultTo<'In Moderation'>;
     publishedAt: Schema.Attribute.DateTime;
-    site: Schema.Attribute.Relation<'oneToOne', 'api::site.site'> &
-      Schema.Attribute.Unique;
+    site: Schema.Attribute.Relation<'oneToOne', 'api::site.site'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedby: Schema.Attribute.Relation<
       'manyToOne',
@@ -465,7 +461,9 @@ export interface ApiStatusSiteStatusSite extends Struct.CollectionTypeSchema {
     >;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    website_role: Schema.Attribute.Enumeration<['Admin', 'Contributor']> &
+    website_role: Schema.Attribute.Enumeration<
+      ['Owner', 'Contributor', 'Partership']
+    > &
       Schema.Attribute.DefaultTo<'Contributor'>;
     website_status: Schema.Attribute.Enumeration<
       ['Pending', 'Approved', 'Rejected', 'Suspended']

@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "attributes": {
     "website_status": {
@@ -43,8 +43,7 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::site.site",
-      "inversedBy": "status_site",
-      "unique": true
+      "inversedBy": "status_site"
     },
     "updatedby": {
       "type": "relation",
@@ -55,8 +54,9 @@
     "website_role": {
       "type": "enumeration",
       "enum": [
-        "Admin",
-        "Contributor"
+        "Owner",
+        "Contributor",
+        "Partership"
       ],
       "default": "Contributor"
     }

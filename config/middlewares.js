@@ -1,8 +1,11 @@
+const auth = require("../src/api/auth/controllers/auth");
+
 module.exports = [
   'strapi::errors',
   {
-    name: 'strapi::cors',
+    name: 'strapi::logger',
     config: {
+      auth: true,
       enabled: true,
       origin: ['*'], // You can restrict to your Next.js URL for better security
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
