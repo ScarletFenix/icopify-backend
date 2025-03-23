@@ -369,6 +369,40 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiProjectProject extends Struct.CollectionTypeSchema {
+  collectionName: 'projects';
+  info: {
+    description: '';
+    displayName: 'Project';
+    pluralName: 'projects';
+    singularName: 'project';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    buyer: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::project.project'
+    > &
+      Schema.Attribute.Private;
+    projectName: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ApiSiteSite extends Struct.CollectionTypeSchema {
   collectionName: 'sites';
   info: {
@@ -384,6 +418,7 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
     categories: Schema.Attribute.String & Schema.Attribute.Required;
     contentCreationPlacementPrice: Schema.Attribute.Integer;
     contentPlacementPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    country: Schema.Attribute.String & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -397,11 +432,7 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::site.site'> &
       Schema.Attribute.Private;
     maxLinksAllowed: Schema.Attribute.Integer & Schema.Attribute.Required;
-    mobileLanguage: Schema.Attribute.Enumeration<
-      ['English', 'Spanish', 'French', 'German']
-    > &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'English'>;
+    mobileLanguage: Schema.Attribute.String & Schema.Attribute.Required;
     owner: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
@@ -956,6 +987,7 @@ export interface PluginUsersPermissionsUser
       }>;
     paypalEmail: Schema.Attribute.String;
     phoneNumber: Schema.Attribute.String;
+    projects: Schema.Attribute.Relation<'oneToMany', 'api::project.project'>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
@@ -994,6 +1026,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::project.project': ApiProjectProject;
       'api::site.site': ApiSiteSite;
       'api::status-site.status-site': ApiStatusSiteStatusSite;
       'plugin::content-releases.release': PluginContentReleasesRelease;

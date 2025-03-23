@@ -61,17 +61,6 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "sites"
     },
-    "mobileLanguage": {
-      "type": "enumeration",
-      "enum": [
-        "English",
-        "Spanish",
-        "French",
-        "German"
-      ],
-      "required": true,
-      "default": "English"
-    },
     "sponsoredContent": {
       "type": "boolean",
       "default": true,
@@ -90,6 +79,14 @@
     "isDeleted": {
       "type": "boolean",
       "default": false
+    },
+    "country": {
+      "type": "string",
+      "required": true
+    },
+    "mobileLanguage": {
+      "type": "string",
+      "required": true
     }
   }
 }

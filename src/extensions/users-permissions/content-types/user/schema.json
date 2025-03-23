@@ -106,6 +106,12 @@
       "relation": "oneToMany",
       "target": "api::site.site",
       "mappedBy": "owner"
+    },
+    "projects": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::project.project",
+      "mappedBy": "buyer"
     }
   }
 }
