@@ -83,7 +83,13 @@ module.exports = createCoreController("api::site.site", ({ strapi }) => ({
   async update(ctx) {
     try {
         const { id } = ctx.params;
-        const user = ctx.state.user;
+
+        // Fetch the logged-in user with their role
+        const user = await strapi.entityService.findOne("plugin::users-permissions.user", ctx.state.user.id, {
+            populate: ["role"],
+        });
+
+        console.log("Logged-in user:", user);
 
         if (!user) {
             console.warn("❌ Unauthorized Update Attempt");
@@ -94,9 +100,12 @@ module.exports = createCoreController("api::site.site", ({ strapi }) => ({
             return ctx.badRequest("Missing site ID.");
         }
 
+        // Fetch the site with its owner and status
         const site = await strapi.entityService.findOne("api::site.site", id, {
-            populate: ["owner"],
+            populate: ["owner", "status_site"],
         });
+
+        console.log("Fetched site:", site);
 
         if (!site) {
             return ctx.notFound("Site not found.");
@@ -104,36 +113,40 @@ module.exports = createCoreController("api::site.site", ({ strapi }) => ({
 
         const { data } = ctx.request.body;
 
-        // 🔹 Admin can update any site
-        if (user.roleType === "Admin") {
-            const updatedSite = await strapi.entityService.update("api::site.site", id, { data });
-            console.log("✅ Admin updated site:", id);
-            return updatedSite;
-        }
+        // Check if the user is an admin
+        const isAdmin = user.role.type.toLowerCase() === "admin";
+        console.log("Is admin:", isAdmin);
 
-        // 🔹 Non-admin can only update their own sites
-        if (site.owner?.id !== user.id) {
+        if (!isAdmin && site.owner?.id !== user.id) {
             console.warn("⚠️ Unauthorized Update Attempt by Non-Owner");
             return ctx.unauthorized("You can only update your own sites.");
         }
 
-        // 🔹 Apply field restrictions for non-admin users
+        // Remove restricted fields from the update payload
         const allowedFields = { ...data };
         delete allowedFields.contentPlacementPrice;
         delete allowedFields.contentCreationPlacementPrice;
         delete allowedFields.mobileLanguage;
 
+        // Perform the update
         const updatedSite = await strapi.entityService.update("api::site.site", id, {
             data: allowedFields,
         });
 
-        console.log("✅ Non-admin updated their own site:", id);
+        console.log(isAdmin ? "✅ Admin updated site:" : "✅ Non-admin updated their own site:", id);
 
-        return updatedSite;
+        return ctx.send({
+            message: "Site updated successfully.",
+            site: updatedSite,
+        });
     } catch (error) {
         console.error("❌ Error updating site:", error);
         return ctx.throw(500, `Internal Server Error: ${error.message}`);
     }
+
+
+
+      
 },
 
 
